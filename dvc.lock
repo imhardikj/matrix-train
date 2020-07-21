@@ -1,0 +1,59 @@
+Posts-xml:
+  cmd: unzip data/Posts.xml.zip -d data/
+  deps:
+  - path: data/Posts.xml.zip
+    md5: 58b8cdd81052813c80686d871cb82a8c
+  outs:
+  - path: data/Posts.xml
+    md5: 43781db5c40ecc39fd718685594f0956
+Posts-tsv:
+  cmd: python3 src/Posts.py
+  deps:
+  - path: data/Posts.xml
+    md5: 43781db5c40ecc39fd718685594f0956
+  - path: src/Posts.py
+    md5: 7951fb239d5f022627965cca732dc8b5
+  outs:
+  - path: Posts.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+posts-test:
+  cmd: python3 src/Posts-test.py
+  deps:
+  - path: Posts.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+  - path: src/Posts-test.py
+    md5: 1ca6c56a9757a3618c9ba5bc663e0828
+  outs:
+  - path: Posts-test.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+Posts-test-tsv:
+  cmd: python3 src/Posts-test.py
+  deps:
+  - path: Posts.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+  - path: src/Posts-test.py
+    md5: 1ca6c56a9757a3618c9ba5bc663e0828
+  outs:
+  - path: Posts-test.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+matrix-train:
+  cmd: python3 src/matrix-train.py
+  deps:
+  - path: Posts-test.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+  - path: Posts.tsv
+    md5: 09f7e02f1290be211da707a266f153b3
+  - path: src/matrix-train.py
+    md5: f9a34b883f4bbe59d7205e99007a5f92
+  params:
+    params.yaml:
+      matrix-train.train:
+      - learning_rate
+      - epochs
+  outs:
+  - path: data/matrix-test.p
+    md5: 09f7e02f1290be211da707a266f153b3
+  - path: data/matrix-train.p
+    md5: 09f7e02f1290be211da707a266f153b3
+  - path: data/model.p
+    md5: 09f7e02f1290be211da707a266f153b3

@@ -1,0 +1,4 @@
+matrix-train:
+    train:
+        - learning_rate
+        - epochs
